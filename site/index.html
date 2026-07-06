@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>个人主页</title>
+<link rel="stylesheet" href="muelsyse.css">
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="paper"></div>
+    <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+    <div class="frame"></div>
+
+    <div class="sprig p1"><svg viewBox="0 0 100 120"><path d="M50 118 Q46 70 54 30 Q56 16 50 4"/><path class="leaf" d="M52 86 Q78 80 88 58 Q62 56 52 86Z"/><path class="leaf" d="M50 60 Q24 52 16 30 Q44 30 50 60Z"/><path class="leaf" d="M52 40 Q72 34 80 16 Q58 16 52 40Z"/><circle class="dew" cx="86" cy="60" r="3.2"/></svg></div>
+    <div class="sprig p2"><svg viewBox="0 0 100 120"><path d="M50 118 Q48 74 52 36 Q54 18 49 4"/><path class="leaf" d="M51 92 Q74 86 82 66 Q60 62 51 92Z"/><path class="leaf" d="M50 66 Q28 58 20 38 Q46 36 50 66Z"/><circle class="dew" cx="80" cy="68" r="2.8"/></svg></div>
+
+    <canvas id="rain"></canvas>
+
+    <div class="slide g1"><div class="sh"></div></div>
+    <div class="slide g2"><div class="sh"></div></div>
+    <div class="slide g3"><div class="sh"></div></div>
+
+    <canvas id="glassrain"></canvas>
+
+    <div class="views" id="views">
+      <!-- 首页 -->
+      <section class="view active" data-view="home">
+        <div class="hero">
+          <div class="art-frame">
+            <div class="art-ph">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#6a6e58" stroke-width="1.4"><rect x="4" y="7" width="32" height="26" rx="2"/><circle cx="14" cy="16" r="3"/><path d="M6 30 L16 21 L23 27 L29 22 L34 27"/></svg>
+              在此放入你的图片
+              <span>把下面 &lt;img&gt; 的 src 改成你的图片地址</span>
+            </div>
+            <img class="art" alt="" src="muelsyse.png" onload="this.style.opacity=1;this.parentElement.querySelector('.art-ph').style.display='none'">
+            <span class="art-corner tl"></span><span class="art-corner br"></span>
+          </div>
+          <div class="card">
+            <div class="glare"></div><span class="corner tl"></span><span class="corner br"></span>
+            <div class="eyebrow">PERSONAL SITE <span class="line"></span> 00</div>
+            <h1 class="title">Firefly<small>个人主页 · PERSONAL</small></h1>
+            <p class="lead">雨落在玻璃上的时候，我把想记的东西收在这里——一份学习记录、一些关于我的事，以及找到我的方式。</p>
+            <nav class="nav">
+              <a href="#" data-go="study">学习记录</a>
+              <a href="#" data-go="blog">文章</a>
+              <a href="#" data-go="about">关于我</a>
+              <a href="#" data-go="contact">联系</a>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学习记录 -->
+      <section class="view doc" data-view="study">
+        <div class="sheet">
+          <div class="doc-head">
+            <a href="#" class="back" data-go="home">← 返回首页</a>
+            <div class="kicker">学习记录 · STUDY LOG</div>
+            <h2>学习打卡 <em>Study Log</em></h2>
+          </div>
+          <div class="dash">
+            <div class="glass stat"><div class="num" id="stDays">—</div><div class="lab">累计打卡 / DAYS</div></div>
+            <div class="glass stat"><div class="num" id="stStreak">—<small>天</small></div><div class="lab">连续 / STREAK</div></div>
+            <div class="glass stat"><div class="num" id="stMonth">—</div><div class="lab">本月 / THIS MONTH</div></div>
+            <div class="glass stat"><div class="num" id="stSum">—</div><div class="lab">总次数 / TOTAL</div></div>
+          </div>
+          <div class="glass">
+            <div class="ph"><b>打卡热力图</b><span>CONTRIBUTION</span><span class="note" id="hmNote"></span></div>
+            <div class="hm-scroll">
+              <div class="hm-months" id="hmMonths"></div>
+              <div class="heatmap" id="heatmap"></div>
+            </div>
+            <div class="hm-legend"><span>少</span><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i><span>多</span></div>
+          </div>
+          <div class="glass">
+            <div class="ph"><b>记录</b><span>LOG</span></div>
+            <ul class="log" id="log">
+              <li><div class="d">2026.06.14<br>№041</div><div><div class="t">这里写学习主题</div><div class="n">一两句备注：学到了什么、卡在哪、下一步。占位文字，替换即可。</div><span class="chip">标签</span></div></li>
+              <li><div class="d">2026.06.02<br>№038</div><div><div class="t">另一条记录标题</div><div class="n">备注内容。可以是读书、项目、课程……任何想留痕的东西。</div><span class="chip">标签</span></div></li>
+              <li><div class="d">2026.05.20<br>№032</div><div><div class="t">再一条</div><div class="n">备注内容。建议每条简短，读起来清爽。</div><span class="chip">标签</span></div></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 文章 / 笔记博客 -->
+      <section class="view doc" data-view="blog">
+        <div class="sheet">
+          <div class="doc-head">
+            <a href="#" class="back" data-go="home">← 返回首页</a>
+            <div class="kicker">文章 · NOTES</div>
+            <h2>笔记博客 <em>Notes</em></h2>
+          </div>
+          <div class="glass">
+            <div class="blog-controls">
+              <input id="blogSearch" class="blog-search" type="search" placeholder="搜索标题 / 正文 / 标签…" autocomplete="off">
+              <select id="blogTag" class="blog-select" aria-label="按标签筛选"></select>
+            </div>
+            <div class="entries" id="blogList"><p class="empty-note">读取中…</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 关于我 -->
+      <section class="view doc" data-view="about">
+        <div class="sheet">
+          <svg class="deco deco-vine" viewBox="0 0 100 140"><path d="M50 140 Q42 90 56 50 Q60 30 50 8" fill="none" stroke="#6e8a63" stroke-width="1.4"/><path d="M54 104 Q82 96 90 72 Q62 70 54 104Z" fill="#b7d0b0" stroke="#6e8a63"/><path d="M50 70 Q22 60 14 36 Q44 36 50 70Z" fill="#b7d0b0" stroke="#6e8a63"/><circle cx="50" cy="14" r="3" fill="#fff" stroke="#9bb38f"/></svg>
+          <div class="doc-head">
+            <a href="#" class="back" data-go="home">← 返回首页</a>
+            <div class="kicker">关于我 · ABOUT</div>
+            <h2>关于我 <em>About</em></h2>
+          </div>
+          <div class="glass">
+            <p class="prose">这里写一段你的自我介绍——你是谁、在做什么、喜欢什么。占位文字，替换即可。</p>
+            <div class="meta"><span>方向 <b>你的领域</b></span><span>坐标 <b>你的城市</b></span><span>状态 <b>在学 / 在做</b></span></div>
+          </div>
+
+          <div class="glass">
+            <div class="ph"><b>随笔 / 想法</b><span>MUSINGS</span>
+              <select id="musingCat" class="blog-select" aria-label="按分类筛选" style="margin-left:auto"></select>
+            </div>
+            <div class="entries" id="musingList"><p class="empty-note">读取中…</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 联系 -->
+      <section class="view doc" data-view="contact">
+        <div class="sheet">
+          <div class="doc-head">
+            <a href="#" class="back" data-go="home">← 返回首页</a>
+            <div class="kicker">联系 · CONTACT</div>
+            <h2>联系 <em>Contact</em></h2>
+          </div>
+          <div class="glass">
+            <ul class="links">
+              <li><span class="k">EMAIL</span><a href="mailto:machengze.0922@gmail.com">machengze.0922@gmail.com</a></li>
+              <li><span class="k">GITHUB</span><a href="https://github.com/FireFly0922" target="_blank" rel="noopener">https://github.com/FireFly0922</a></li>
+              <li><span class="k">Leetcode</span><a href="https://leetcode.cn/u/firefly0922/" target="_blank" rel="noopener">https://leetcode.cn/u/firefly0922/</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script src="effects.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+[
+  {
+    "date": "2026-07-05",
+    "counts": {
+      "commits": 0,
+      "notes": 5,
+      "papers": 0
+    },
+    "level": 2
+  },
+  {
+    "date": "2026-07-06",
+    "counts": {
+      "commits": 0,
+      "notes": 3,
+      "papers": 1
+    },
+    "level": 2
+  }
+]

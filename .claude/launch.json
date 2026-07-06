@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "daily-agent",
+      "runtimeExecutable": "D:\\personal_web\\daily-agent.exe",
+      "runtimeArgs": ["-addr", "127.0.0.1:8765", "-site", "D:\\personal_web\\site"],
+      "port": 8765
+    }
+  ]
+}

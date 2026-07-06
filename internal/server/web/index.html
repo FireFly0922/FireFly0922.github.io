@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>daily-agent · 今日勾选</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stage" id="stage">
+    <!-- muelsyse 主题：纸格背景 / 定位角 / 边框 / 叶片 / 纸雨 / 悬浮玻璃 / 玻璃水珠 -->
+    <div class="paper"></div>
+    <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+    <div class="frame"></div>
+    <div class="sprig p1"><svg viewBox="0 0 100 120"><path d="M50 118 Q46 70 54 30 Q56 16 50 4"/><path class="leaf" d="M52 86 Q78 80 88 58 Q62 56 52 86Z"/><path class="leaf" d="M50 60 Q24 52 16 30 Q44 30 50 60Z"/><path class="leaf" d="M52 40 Q72 34 80 16 Q58 16 52 40Z"/><circle class="dew" cx="86" cy="60" r="3.2"/></svg></div>
+    <div class="sprig p2"><svg viewBox="0 0 100 120"><path d="M50 118 Q48 74 52 36 Q54 18 49 4"/><path class="leaf" d="M51 92 Q74 86 82 66 Q60 62 51 92Z"/><path class="leaf" d="M50 66 Q28 58 20 38 Q46 36 50 66Z"/><circle class="dew" cx="80" cy="68" r="2.8"/></svg></div>
+
+    <canvas id="rain"></canvas>
+    <div class="slide g1"><div class="sh"></div></div>
+    <div class="slide g2"><div class="sh"></div></div>
+    <div class="slide g3"><div class="sh"></div></div>
+    <canvas id="glassrain"></canvas>
+
+    <main class="sheet">
+      <div class="doc-head">
+        <div class="eyebrow">DAILY AGENT <span class="line"></span> 本地勾选</div>
+        <h2>今日学习痕迹 <em id="date">—</em></h2>
+        <div class="tabs">
+          <button class="tab active" id="tab-collect">每日采集</button>
+          <button class="tab" id="tab-musing">写随笔</button>
+        </div>
+      </div>
+
+      <div id="panel-collect">
+        <p class="lead">采集今天在 git / Obsidian / Zotero 留下的痕迹，勾选确认后交给 agent 写「今天 vs 昨天」的对比日报，再上传。</p>
+
+        <div class="glass toolbar">
+          <div class="bar">
+            <button class="btn" id="btn-collect">采集</button>
+            <button class="btn" id="btn-summarize" disabled>总结</button>
+            <button class="btn" id="btn-upload" disabled>上传</button>
+          </div>
+          <span class="status" id="status"></span>
+        </div>
+
+        <div id="groups"></div>
+
+        <div class="glass report-box" id="report-box" hidden>
+          <div class="ph"><b>对比日报预览</b><span>DIFF REPORT</span></div>
+          <pre class="report" id="report"></pre>
+        </div>
+      </div>
+
+      <div id="panel-musing" hidden>
+        <p class="lead">写一段乐评 / 书评 / 播客思考 / 随想，发布到公网「关于我」页。支持 Markdown。</p>
+        <div class="glass">
+          <div class="ph"><b>写随笔</b><span>MUSING</span></div>
+          <div class="form">
+            <input class="field" id="m-title" type="text" placeholder="标题" autocomplete="off">
+            <select class="field" id="m-category">
+              <option>想法</option>
+              <option>乐评</option>
+              <option>书评</option>
+              <option>播客</option>
+              <option>其他</option>
+            </select>
+            <textarea class="field" id="m-content" rows="12" placeholder="正文（支持 Markdown：# 标题、**加粗**、- 列表、表格、```代码块```）"></textarea>
+            <div class="bar">
+              <button class="btn" id="btn-publish">发布</button>
+              <span class="status" id="m-status"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="effects.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

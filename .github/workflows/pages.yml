@@ -1,0 +1,32 @@
+# 把 site/ 静态目录发布到 GitHub Pages。
+# 启用方式：仓库 Settings → Pages → Source 选「GitHub Actions」，然后 push 即可。
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site        # 只发布 site/ 这个纯静态目录
+      - id: deployment
+        uses: actions/deploy-pages@v4

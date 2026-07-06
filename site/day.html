@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>学习记录 · 详情</title>
+<link rel="stylesheet" href="muelsyse.css">
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="paper"></div>
+    <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+    <div class="frame"></div>
+
+    <div class="sprig p1"><svg viewBox="0 0 100 120"><path d="M50 118 Q46 70 54 30 Q56 16 50 4"/><path class="leaf" d="M52 86 Q78 80 88 58 Q62 56 52 86Z"/><path class="leaf" d="M50 60 Q24 52 16 30 Q44 30 50 60Z"/><path class="leaf" d="M52 40 Q72 34 80 16 Q58 16 52 40Z"/><circle class="dew" cx="86" cy="60" r="3.2"/></svg></div>
+    <div class="sprig p2"><svg viewBox="0 0 100 120"><path d="M50 118 Q48 74 52 36 Q54 18 49 4"/><path class="leaf" d="M51 92 Q74 86 82 66 Q60 62 51 92Z"/><path class="leaf" d="M50 66 Q28 58 20 38 Q46 36 50 66Z"/><circle class="dew" cx="80" cy="68" r="2.8"/></svg></div>
+
+    <canvas id="rain"></canvas>
+    <div class="slide g1"><div class="sh"></div></div>
+    <div class="slide g2"><div class="sh"></div></div>
+    <div class="slide g3"><div class="sh"></div></div>
+    <canvas id="glassrain"></canvas>
+
+    <div class="views">
+      <section class="view doc active" data-view="day">
+        <div class="sheet">
+          <div class="doc-head">
+            <a href="index.html#study" class="back">← 返回学习记录</a>
+            <div class="kicker">学习记录 · DAILY DETAIL</div>
+            <h2 id="dayTitle">—</h2>
+          </div>
+          <div id="dayContent">
+            <div class="glass"><p class="empty-note">读取中…</p></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="effects.js"></script>
+  <script src="day.js"></script>
+</body>
+</html>

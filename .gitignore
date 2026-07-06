@@ -1,0 +1,15 @@
+# 密钥与本地配置 —— 绝不进仓库（设计文档 §6.4 安全红线）
+.env
+config.yaml
+
+# Go 构建产物
+/daily-agent
+/daily-agent.exe
+*.exe
+*.test
+*.out
+
+# 编辑器 / 系统
+.DS_Store
+.idea/
+.vscode/

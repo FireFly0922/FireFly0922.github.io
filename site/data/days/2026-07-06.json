@@ -1,0 +1,49 @@
+{
+  "date": "2026-07-06",
+  "commits": null,
+  "notes": [
+    {
+      "id": "obs-个人/plan.md",
+      "source": "obsidian",
+      "title": "plan",
+      "detail": "短期",
+      "content": "# 短期\n- [ ] 学golang，完成个人网页\n- [x] 梳理专利团雾识别思路，发给老板\n- [ ] 学习师姐发的资料\n- [ ] 看data free论文代码\n- [ ] 接待铅笔\n- [ ] 和电赛小组讨练习项目\n# 长期\n- [ ] 《动手学深度学习》\n- [ ] leetcode算法\n- [ ] hello-agent学习",
+      "tags": [
+        "个人"
+      ]
+    },
+    {
+      "id": "obs-从零开始的全栈之路/Golang.md",
+      "source": "obsidian",
+      "title": "Golang",
+      "detail": "lesson0.Go语言基础直觉",
+      "content": "# lesson0.Go语言基础直觉\n`module`：一个项目\n`package`：一个代码包，如`user`,`main`\n`function`：函数\n`test`：Go的特色，鼓励提前把异常情况写清楚，让错误显式返回\n`binary`：编译出来的可执行程序\n## package\n`package main`中`main`是特殊包，表示该项目可被编译成可执行程序\n## import\n`fmt`：格式化输出\n`strings`：处理字符串\n```go\nimport (\n\t\"fmt\"\n\t\"strings\"\n)\n```\n## func\n必须有严格的函数签名\n```go\n//函数：签名清晰\nfunc Greet(name string) string{\n    name = strings.TrimSpace(name)\n//鼓励显示返回错误\n    if name == \"\" {\n        return \"Hello , Go begining!\"\n    }\n    return \"Hello, \" + name + \"!\"\n}\n```\n`TrimSpace`是将`name`左右两侧的空白字符去掉，重新赋值给`name`，而且不会干扰中间的字符\n## 测试\n```go\npackage main\nimport \"testing\"\n//正常输入测试\nfunc TestGreetWithName(t *testing.T) {\n\tgot := Greet(\"Alice\")\n\twant := \"Hello, Alice!\"\n\tif got != want {\n\t\tt.Fatalf(\"Greet() = %q, want %q\", got, want)\n\t}\n}\n//空输入测试\nfunc TestGreetWithEmptyName(t *testing.T) {\n\tgot := Greet(\"   \")\n\twant := \"Hello, Go beginner!\"\n\tif got != want {\n\t\tt.Fatalf(\"Greet() = %q, want %q\", got, want)\n\t}\n}\n```\n`:=`是第一次创建变量时的赋值操作\n`func TestGreetWithName(t *testing.T) `表示测试函数需要接收一个名为`t`的参数，类型是`testing.T`，T是`testing`包中定义的结构体类型，是当前测试的控制器\n使用指针是因为测试状态需要修改\n\n# lesson1.Go语言基础语法\n## 变量声明\n- 短变量声明：创建一个变量，指明类型和初始值\n\t```go\n\ttasks := []Task{}      //类型是[]Task,初始值为空切片\n\t```\n\t`:=`的声明方式只能在函数内使用\n- 显式声明\n\t```go\n\tvar err error      //声明一个err变量叫var，类型为error，暂时没有具体错误\n\t```\n\t对需要反复进行赋值的情况，已有变量再进行赋新值用`=`\n\t如：`tasks, err = AddTask(tasks, \"Learn Go variables\")`\n- 对于短变量其实就是省去`var`的显示声明\n\t```go\n\tname := \"Firefly\"\n\tvar name = \"Firefly\"\n\t```\n\t\n## 函数返回多值\n```go\nfunc NewTask(id int, title string) (Task, error) {}\n```\n这里是输入`id`和`title`，输出`Task`和`error`\n## 默认零值设置\n```\nint    的零值是 0\nstring 的零值是 \"\"\nbool   的零值是 false\nerror  的零值是 nil\n```\n\n",
+      "tags": [
+        "从零开始的全栈之路"
+      ]
+    },
+    {
+      "id": "obs-动手学深度学习/卷积神经网络(CNN).md",
+      "source": "obsidian",
+      "title": "卷积神经网络(CNN)",
+      "detail": "`沃尔多在哪`引入的CNN",
+      "content": "# `沃尔多在哪`引入的CNN\n## 计算机视觉中平移不变性，局部性\n1. **平移不变性**：神经网络前几层与检测对象的位置无关\n2. **局部性**：神经网络的前几层只探索图像的局部区域，不在意图像中相隔较远的区域\n关于`CNN`和`Transformer`的区别：`CNN`是强归纳偏置，`transformer`是更加灵活的全局注意力\n- CNN：\n\t局部先行，逐层扩大感受野。  \n\t强归纳偏置，适合图像，小数据下也比较稳。\n- RNN：\n\t按顺序读信息，用隐藏状态传递上下文。  \n\t更适合序列，比如文本、时间序列。如果处理图像，通常要把图像展开成序列，但这会破坏部分二维结构。\n- Transformer：\n\t把图像切成 patch 或 token，然后用注意力机制让任意位置之间直接交流。  \n\t全局建模能力强，但通常更依赖数据量、预训练和算力。\n## 数学表达\n多层感知机输入为二维图像**X**，隐藏表示**H**是一个二维张量。\n（隐藏表示：神经网络中间层对原始图像重新编码后的特征）\n全连接层形式化表示：对输出隐藏表示的每个位置$(i,j)$，它和输入图像中的$(k,l)$相连\n$[\\mathbf{H}] _{i,j} = [\\mathbf{U}] _{i,j} + \\sum_k\\sum_l[[\\mathbf{W}] _{i,j,k,l}][\\mathbf{X}]_{k,l}$\n",
+      "tags": [
+        "动手学深度学习"
+      ]
+    }
+  ],
+  "papers": [
+    {
+      "id": "zot-2Y7EFWY2",
+      "source": "zotero",
+      "title": "Knowledge Distillation: A Survey",
+      "detail": "journalArticle · 更新于 2026-07-06T02:11:20Z (UTC)",
+      "content": "journalArticle · 更新于 2026-07-06T02:11:20Z (UTC)\n\nIn recent years, deep neural networks have been successful in both industry and academia, especially for computer vision tasks. The great success of deep learning is mainly due to its scalability to encode large-scale data and to maneuver billions of model parameters. However, it is a challenge to deploy these cumbersome deep models on devices with limited resources, e.g., mobile phones and embedded devices, not only because of the high computational complexity but also the large storage requirements. To this end, a variety of model compression and acceleration techniques have been developed. As a representative type of model compression and acceleration, knowledge distillation effectively learns a small student model from a large teacher model. It has received rapid increasing attention from the community. This paper provides a comprehensive survey of knowledge distillation from the perspectives of knowledge categories, training schemes, teacher-student architecture, distillation algorithms, performance comparison and applications. Furthermore, challenges in knowledge distillation are briefly reviewed and comments on future research are discussed and forwarded.",
+      "tags": [
+        "journalArticle"
+      ]
+    }
+  ],
+  "report": "## 今日学习变化日报（2026-07-06）\n\n### 新开\n- **卷积神经网络(CNN)**：以《沃尔多在哪》案例切入 CNN，昨天无此方向。\n- **Zotero 阅读**：开始阅读综述《Knowledge Distillation: A Survey》，昨天无阅读记录。\n- **短期计划**：新增「plan：短期」笔记，昨天未出现。\n\n### 继续推进\n- **Golang 入门**：昨日创建 lesson0 笔记，今日继续整理「Go语言基础直觉」相关内容。\n\n### 搁置\n- **专利申请技术交底**、**个人网站设计**、**实习准备计划**：昨日有动作，今日无任何跟进。"
+}
