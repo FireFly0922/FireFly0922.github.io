@@ -45,7 +45,6 @@ html, body { min-height: 100%; font-family: var(--sans); background: var(--paper
 .sprig.p2 { bottom: 6%; right: 2.5%; width: 70px; transform: rotate(-8deg) scaleX(-1); }
 
 #rain { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
-#glassrain { position: fixed; inset: 0; z-index: 4; pointer-events: none; }
 
 /* 悬浮磨砂玻璃片（背景装饰） */
 .slide { position: fixed; z-index: 3; border-radius: 3px; overflow: hidden;

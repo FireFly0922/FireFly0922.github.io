@@ -116,11 +116,11 @@ function truncate(s, n) {
 function oneLine(s) {
     return s.replace(/\s+/g, " ").trim();
 }
-// startAmbient 启动全套背景动画。缺失的 canvas 会被安全跳过。
+// startAmbient 启动背景动画：纸雨 + 光泽跟随。缺失的 canvas 会被安全跳过。
+// （原玻璃水珠 #glassrain 系统因每帧数百粒子太吃资源、视觉又不明显，已移除。）
 function startAmbient() {
     const stage = document.getElementById("stage");
     const rainC = document.getElementById("rain");
-    const glassC = document.getElementById("glassrain");
     if (!stage)
         return;
     let W = window.innerWidth;
@@ -166,90 +166,6 @@ function startAmbient() {
             }
         }
     }
-    // --- 玻璃上的水珠与水痕 ---
-    const gctx = glassC ? glassC.getContext("2d") : null;
-    let beads = [];
-    let threads = [];
-    function makeBead(top) {
-        return { x: Math.random() * W, y: top ? -8 : Math.random() * H, r: 1.6 + Math.random() * 3.2, vy: 0, sliding: false, grow: Math.random() * 0.005 };
-    }
-    function makeThread(y) {
-        return { x: Math.random() * W, y, len: 36 + Math.random() * 150, sp: 1.6 + Math.random() * 3.4, w: 0.7 + Math.random() * 1.3, a: 0.05 + Math.random() * 0.13, wob: Math.random() * 7 };
-    }
-    function initBeads() {
-        beads = Array.from({ length: Math.min(210, Math.floor((W * H) / 11000)) }, () => makeBead(false));
-    }
-    function initThreads() {
-        threads = Array.from({ length: Math.max(10, Math.floor(W / 28)) }, () => makeThread(Math.random() * H));
-    }
-    function drawBead(d) {
-        if (!gctx)
-            return;
-        const g = gctx.createRadialGradient(d.x - d.r * 0.3, d.y - d.r * 0.3, d.r * 0.1, d.x, d.y, d.r);
-        g.addColorStop(0, "rgba(255,255,255,0.42)");
-        g.addColorStop(0.45, "rgba(150,185,172,0.10)");
-        g.addColorStop(0.85, "rgba(110,150,142,0.16)");
-        g.addColorStop(1, "rgba(255,255,255,0.34)");
-        gctx.fillStyle = g;
-        gctx.beginPath();
-        gctx.arc(d.x, d.y, d.r, 0, 7);
-        gctx.fill();
-        let dx = lx - d.x, dy = ly - d.y;
-        const m = Math.hypot(dx, dy) || 1;
-        dx /= m;
-        dy /= m;
-        gctx.fillStyle = "rgba(255,255,255,0.85)";
-        gctx.beginPath();
-        gctx.arc(d.x - dx * d.r * 0.4, d.y - dy * d.r * 0.4, Math.max(0.6, d.r * 0.22), 0, 7);
-        gctx.fill();
-    }
-    function drawThread(t) {
-        if (!gctx)
-            return;
-        const g = gctx.createLinearGradient(t.x, t.y - t.len, t.x, t.y);
-        g.addColorStop(0, "rgba(180,205,198,0)");
-        g.addColorStop(1, `rgba(195,218,210,${t.a})`);
-        gctx.strokeStyle = g;
-        gctx.lineWidth = t.w;
-        gctx.lineCap = "round";
-        gctx.beginPath();
-        gctx.moveTo(t.x, t.y - t.len);
-        gctx.quadraticCurveTo(t.x + Math.sin(t.y * 0.05) * t.wob, t.y - t.len / 2, t.x, t.y);
-        gctx.stroke();
-        gctx.fillStyle = `rgba(225,238,233,${Math.min(0.5, t.a + 0.15)})`;
-        gctx.beginPath();
-        gctx.arc(t.x, t.y, t.w * 1.4, 0, 7);
-        gctx.fill();
-    }
-    function stepGlass() {
-        if (!gctx)
-            return;
-        gctx.clearRect(0, 0, W, H);
-        for (const t of threads) {
-            drawThread(t);
-            t.y += t.sp;
-            if (t.y - t.len > H)
-                Object.assign(t, makeThread(-t.len));
-        }
-        for (const d of beads) {
-            if (!d.sliding) {
-                d.r += d.grow;
-                if (d.r > 5.2 && Math.random() < 0.02)
-                    d.sliding = true;
-            }
-            else {
-                d.vy = Math.min(d.vy + 0.14, 2.4 + d.r * 0.25);
-                d.y += d.vy;
-                if (Math.random() < 0.3)
-                    beads.push({ x: d.x + (Math.random() - 0.5) * 1.5, y: d.y - d.r, r: Math.max(1, d.r * 0.34), vy: 0, sliding: false, grow: 0 });
-                if (d.y > H + d.r)
-                    Object.assign(d, makeBead(true));
-            }
-            drawBead(d);
-        }
-        if (beads.length > 460)
-            beads.splice(0, beads.length - 460);
-    }
     // --- 光泽跟随 ---
     function stepLight(now) {
         if (!hasPointer) {
@@ -267,7 +183,6 @@ function startAmbient() {
     }
     function frame(now) {
         stepAir();
-        stepGlass();
         stepLight(now);
         requestAnimationFrame(frame);
     }
@@ -278,13 +193,7 @@ function startAmbient() {
             rainC.width = W;
             rainC.height = H;
         }
-        if (glassC) {
-            glassC.width = W;
-            glassC.height = H;
-        }
         initAir();
-        initBeads();
-        initThreads();
     }
     window.addEventListener("resize", resize);
     resize();
