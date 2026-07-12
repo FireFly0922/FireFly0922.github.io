@@ -1,0 +1,28 @@
+{
+  "date": "2026-07-12",
+  "commits": null,
+  "notes": [
+    {
+      "id": "obs-动手学深度学习/知识补齐.md",
+      "source": "obsidian",
+      "title": "知识补齐",
+      "detail": "7.10组会",
+      "content": "# 7.10组会\n## SFCT：空域频域协同 Transformer\n空域：图像本身，每个位置对应一个空间区域\n频域：图像/特征变换表示成不同的频率成分( FFT / 小波变换等)\n$$F = \\mathcal{F}(X)$$\n- **低频信息**通常对应大范围、变化缓慢的部分，例如整体亮度、背景、粗略结构、器官主体轮廓。\n- **高频信息**通常对应变化剧烈的部分，例如边缘、细节纹理、噪声、伪影。\n典型的 SFCT 模块：让空域和频域特征不简单拼接，而是相互引导\n### 空域分支提取空间结构：建模不同图像区域间的关系\n$$X_s = SpatialAttn(X)$$\n### 频域分支提取频域结构：\n$F = FFT2(X)$\n复数表示为$F = A \\cdot e^{jP}$\n$A$是幅度谱，反应各频率成分的强弱；$P$是相位谱，和空间、位置关系密切相关\n可以对频域特征做注意力/滤波：$$F' = FreqAttn(F)$$\n逆变换回空域：$$X_f = IFFT2(F')$$\n从而得到经频域增强/抑制后的特征$X_f$\n### 空频协同融合：\n交叉注意力、门控机械或双域 FFN$$Y = X_s + g(X_s , X_f) \\odot X_f$$\n可学习门控机制$g( \\cdot )$决定哪些频域信息注入空域特征\nCross-Attention：$$Q = W_qX_s , K = W_kX_f , V = W_vX_f$$$$Y = Softmax (\\frac{QK^T}{\\sqrt q}V)$$\n使用空域特征作为 Query 在频域信息中定位有效信息\n- 交叉注意力：计算量较大\n- 门控机制：有用的塞进来，没用的不看\n- 双域 FFN：同时处理空域、频域模块后进行交叉注意力，再门控\n## Loss 函数的联合优化\n所有 Loss 共同决定梯度：多个 loss 都参与反向传播，共同更新模型参数\n**分阶段优化**：先练 encoder ；冻结 encoder 后练 decoder\n## 交叉熵\n真实标签y(取0/1)×概率p的形式，如：$L_{CE} = -\\sum^K_{k=1}y_k \\log p_k$\n## Swin Transformer\n局部 Window Multi-Head Self-Attention 在固定窗口内做注意力\n不同窗口间通过 Shifted Window MSA 让原本位于不同窗口边界附近的 token 有机会进入同一个窗口做注意力\n## 一些想法\n也就是说频域无法将气泡带来的“边缘”（高频）和“亮度”（低频）信息分开\n“气泡”是否对完整教师模型有影响，降低权重\nshifted window做去除气泡？\ncuda、perfiling\nNvidia生态有jetson开发板cuda生态\n国产Rk系列是NPU算子，如果需要能不能报一块\n主流推理框架vllm/sglang无法使用\nDMSR 还不懂\n可以借助DHSA论文方案，修改loss，不求修复",
+      "tags": [
+        "动手学深度学习"
+      ]
+    },
+    {
+      "id": "obs-论文阅读/Restoring Images in Adverse Weather Conditions via Histogram Transformer.md",
+      "source": "obsidian",
+      "title": "Restoring Images in Adverse Weather Conditions via Histogram Transformer",
+      "detail": "整体结构",
+      "content": "# 整体结构\n$I^{lq}$ → $3 \\times 3\\ Conv$ → $Encoder\\ with\\ HTBs$ → $Bottleneck$ → $Decoder\\ with\\ HTBs$\n![[histoformer.png|697]]\n# HTB\n$$F_l = F_{l-1} + DHSA(LN(F_{l-1}))$$\n$$F_l = F_l + DGFF(F_l)$$\n## 动态范围直方图自注意力(DHSA)\n- 动态范围卷积：先排序，再卷积\n  先验假设：退化区域在空间上很分散，但视觉上很相似\n  对图片，排序本质上是”转置矩阵“，记 P ，原来是 x ，按照视觉相似重排后$s_{sort} = Px$，并做卷积后逆变化回原位置：$y = P^{-1}CPx$\n  注：此处的 P 实际来源于对图片展开后一维向量的序数，而不是真的需要找一个逆矩阵描述变化，此处默认图像的数值相似意味着视觉上的信息相似\n  对于卷积(以$3\\times3$)：其观察区域从空间上连续的$3\\times3$窗口，变为按照视觉上相似度排序的窗口\n- 直方图自注意力\n  由于上一步中重新排列后，卷积看到的图片变成视觉相似度排列的，Value 改变，此时$Attention(Q,K,V) = Softmax(\\frac{QK^T}{\\sqrt d})V$查询到的 Q 和 K 也是重排后的\n  注：在 attention 中，Q,K,V均和图像经过前面网络得到的特征图 F 成线性关系\n  原图$I$ → patch embedding / convolution → F → 投影 → V\n  排序后特征序列的一段(bin)规定为等数量切分方便并行加速\n\t- 按 bin 维度的直方图重排(BHR)\n\t  设 bin 数为 B ，包含$\\frac{HW}{B}$个元素，在重排序后落到同一个或相邻 bin 中\n\t- 基于频率的直方图重塑(FHR)\n\t  将每个 bin 的频率设为 B ，bin 数变成$\\frac{HW}{B}$，这里的”频率“是“每个 bin 中元素出现的频数 / 数量维度”，而非傅里叶频率\n\t- 对 BHR 和 FHR进行逐元素相乘$$A_B = Softmax(\\frac{R_B(Q_1)R_B(K_1)^T}{\\sqrt k})R_B(V)$$$$A_F = Softmax(\\frac{R_F(Q_2)R_F(K_2)^T}{\\sqrt k})R_F(V)$$\n\t  最终：逐元素相乘$A = A_B \\odot A_F$\n\t  这里更像是全局的直方图关系和细粒度的直方图关系融合\n- 对比空频融合\n\n| 模块               | 两个分支分别是什么                           | 融合含义              |\n| ---------------- | ----------------------------------- | ----------------- |\n| 空频协同 Transformer | 空域特征 ($X_s$) + 频域特征 ($X_f$)         | 空间结构与频率模式互补       |\n| Histoformer DHSA | BHR histogram 视角 + FHR histogram 视角 | 大范围动态关系与细粒度相似关系互补 |\n## 双尺度门控前馈网络(DGFF)\n使用$1 \\times 1$卷积核进行扩展(C通道数，H,W为空间信息)\n将多个通道维度的信息转换到空间维度(PicelShuffle)$X \\in R^{C \\cdot s^2 \\times H \\times W}\\ =\\ R^{C \\times sH \\times sW}$\n沿通道维度进行拆分$$F_{l,1} , F_{l,2} = Split(Shuffle(Conv_{1 \\times 1}(F_l)))$$\n将通道拆成两半：（使用深度卷积确保每个通道的信息不混合）\n$F_{l,1} \\rightarrow Conv^d_{5 \\times 5}$看大的局部区域\n$F_{l,2} \\rightarrow Conv^{d,dilated}_{3 \\times 3}$看稀疏扩张的大范围区域（空洞卷积：隔一定间隔采样）\n令$F_{l,2}$作为 gate 进行门控，也就是$Mish(F_{l,2})$大则$F_{l,1}$保留多$$Mish(F_{l,2}) \\odot F_{l,1}$$\nDGFF 完整流程：\n```\n输入特征 F_l\n   |\n1x1 卷积：扩展通道，增强表达能力\n   |\nPixelShuffle：把部分通道信息展开到空间维度\n   |\nSplit：沿通道拆成两支\n   |\n   |-----------------------------|\n   |                             |\n5x5 depth-wise conv        dilated 3x3 depth-wise conv\n提取较密集局部信息          提取更大范围上下文\n   |                             |\n   |                        Mish 激活\n   |                             |\n   |---------- 逐元素相乘 gate ---|\n                 |\n\tPixelUnshuffle：恢复特征排列\n                 |\n\t\t1x1 卷积：融合通道并输出\n                 |\n\t\t\t输出 F_{l+1}\n```\n# 问题\nDHSA 可能会收到高亮其它部分影响:\n- 气泡可能造成折射变形；\n- 气泡可能遮挡真实纹理；\n- 气泡和水下高光、鱼鳞、反光区域可能强度相似；\n- 水下图像还有偏色、低对比度、散射模糊；\n- 气泡不一定总是高亮，有时是透明边缘 + 内部折射。\n多角度检索\n",
+      "tags": [
+        "论文阅读"
+      ]
+    }
+  ],
+  "papers": null,
+  "report": "## 学习日报 · 2026-07-12\n\n昨天无记录，今天所有内容均为**新开**。\n\n### 新开\n- **组会知识补齐**：补充 7.10 组会相关内容。\n- **论文精读**：开启 *Restoring Images in Adverse Weather Conditions via Histogram Transformer*，梳理了整体结构。\n\n### 搁置\n- git 与 zotero 均无新提交/阅读。\n\n---\n\n**小结**：今日零散推进，无延续任务，侧重组会复盘与单篇论文框架掌握。"
+}
