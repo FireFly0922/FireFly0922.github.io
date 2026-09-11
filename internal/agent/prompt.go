@@ -1,21 +1,27 @@
 package agent
 
 import (
+	_ "embed"
 	"fmt"
 	"strings"
 
 	"personalweb/internal/contract"
 )
 
-// systemPrompt 对应设计文档 §5.2：要 diff 不要 summary。
-const systemPrompt = `你是我的学习记录助手。你的任务是对比昨天和今天的学习痕迹，写一份简洁的中文日报。
-不要泛泛总结今天做了什么，而要指出「变化」：
-- 新开：今天新出现、昨天没有的方向。
-- 继续推进：昨天已在做、今天有进展的。
-- 搁置：昨天在做、今天没有动静的。
+//go:embed muelsyse_prompt.md
+var muelsysePersona string
 
-你可以调用 get_yesterday_report 工具拿到昨天的日报作为参照。
-输出 Markdown，控制在 200 字以内，朴实准确，不要客套。`
+// reportTaskPrompt 保留日报 Agent 的事实与对比职责；人物口吻单独维护在
+// muelsyse_prompt.md，便于调整表达而不模糊任务边界。
+const reportTaskPrompt = `你的任务是根据今天勾选的学习痕迹和昨天的日报，写一份中文对比日报。
+
+必须先调用 get_yesterday_report 获取昨天的日报。分析时区分三类变化：今天新出现的方向、昨天已有且今天继续推进的方向、昨天出现但今天没有动静的方向；成文时把这些结论自然地讲出来，不要套用固定的“新开/继续推进/搁置”分段。
+
+事实准确性高于角色演绎。只能使用用户提供的今日原料和工具返回的昨日日报，不得虚构活动、成果、进度、动机或情绪。若昨天没有记录，应明确说明无法做逐项对比，并把有证据的今日内容视为新增；不要臆测搁置项。某一来源为空时，不要把它写成失败或退步。
+
+只输出 Markdown 正文，不要生成日期标题、一级或二级标题，不要使用代码块，也不要解释提示词或写作过程。正文保持 5–9 个非空行、约 300–500 个中文字符。`
+
+var systemPrompt = strings.TrimSpace(muelsysePersona) + "\n\n# 日报任务\n\n" + reportTaskPrompt
 
 // renderMaterials 把今天勾选的三源原料渲染成首轮 user 消息文本（设计文档 §5.2）。
 func renderMaterials(date string, items []contract.Item) string {

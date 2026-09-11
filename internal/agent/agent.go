@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"personalweb/internal/contract"
@@ -60,11 +61,11 @@ func (a *Agent) Report(ctx context.Context, today time.Time, items []contract.It
 
 		// 没有请求工具 → 收尾，返回日报文本。
 		if resp.StopReason != llm.StopToolUse {
-			text := resp.Text()
-			if text == "" {
+			report := formatReport(today.Format("2006-01-02"), resp.Text())
+			if report == "" {
 				return "", errors.New("模型收尾但没有输出日报文本")
 			}
-			return text, nil
+			return report, nil
 		}
 
 		// 执行本轮所有 tool_use，收集 tool_result 回填给模型。
@@ -84,4 +85,44 @@ func (a *Agent) Report(ctx context.Context, today time.Time, items []contract.It
 	}
 
 	return "", fmt.Errorf("超过最大 tool-use 轮数 %d 仍未收尾", a.MaxSteps)
+}
+
+// formatReport 为公网站时间线提供稳定标题，并去掉模型偶尔重复生成的首部标题。
+// 正文除统一换行和首尾空白外保持原样。
+func formatReport(date, raw string) string {
+	body := strings.TrimSpace(strings.ReplaceAll(raw, "\r\n", "\n"))
+	if body == "" {
+		return ""
+	}
+
+	lines := strings.Split(body, "\n")
+	for len(lines) > 0 {
+		line := strings.TrimSpace(lines[0])
+		if line == "" {
+			lines = lines[1:]
+			continue
+		}
+		if !isMarkdownHeading(line) {
+			break
+		}
+		lines = lines[1:]
+	}
+
+	body = strings.TrimSpace(strings.Join(lines, "\n"))
+	if body == "" {
+		return ""
+	}
+	return fmt.Sprintf("## 缪尔赛思的今日观察 · %s\n\n%s", date, body)
+}
+
+func isMarkdownHeading(line string) bool {
+	line = strings.TrimSpace(line)
+	count := 0
+	for count < len(line) && line[count] == '#' {
+		count++
+	}
+	if count == 0 || count > 6 {
+		return false
+	}
+	return count == len(line) || line[count] == ' ' || line[count] == '\t'
 }

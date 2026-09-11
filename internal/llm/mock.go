@@ -19,18 +19,15 @@ type Mock struct {
 	Report string
 }
 
-const defaultMockReport = `## 今日 vs 昨天
+const defaultMockReport = `（把几份记录交给流形摊开，我沿着今天留下的水痕逐项看过去）
 
-**新开**
-- 打通了 daily-agent 的最小闭环（collect → 勾选 → 总结 → 上传）。
+FireFly，今天最明显的新变化，是 daily-agent 已经打通 collect、勾选、总结到上传的最小闭环；这条路线不再只是纸面上的计划了。
 
-**继续推进**
-- Go 并发模型笔记：对比了 WaitGroup 与 errgroup 的取舍。
+Go 并发模型的笔记也还在向前流动：今天继续比较了 WaitGroup 与 errgroup 的取舍，算是沿着昨天的方向又往深处走了一步。
 
-**搁置**
-- 暂无。
+暂时没有从记录里看到明确搁置的新项目，所以我不会替你凭空补上一项。哼哼，账面很干净，对吧？
 
-> （mock 生成，用于 v1 空跑验证）`
+今天的变化我都收好了。忙完记得喝点水，明天再让我看看这些小小的涟漪会流向哪里。`
 
 func (m Mock) Complete(_ context.Context, req Request) (Response, error) {
 	if hasToolResult(req.Messages) {
