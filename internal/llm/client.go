@@ -44,8 +44,10 @@ type Block struct {
 
 	// Type == "thinking" / "redacted_thinking"（扩展思考模型，如 DeepSeek reasoning）。
 	// tool-use 多轮时必须把这些块原样回传，否则端点报 missing field `thinking`。
-	Thinking  string `json:"thinking,omitempty"`
-	Signature string `json:"signature,omitempty"`
+	// 注意 Thinking/Signature 不能带 omitempty：DeepSeek 偶尔返回 thinking 内容为空的块，
+	// 空字段被 omitempty 丢掉后网关报 400（2026-09 实测复现）。
+	Thinking  string `json:"thinking"`
+	Signature string `json:"signature"`
 	Data      string `json:"data,omitempty"`
 }
 
