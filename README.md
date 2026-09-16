@@ -183,6 +183,10 @@ git remote add origin https://github.com/你的用户名/仓库名.git   # 没�
 ```
 没有远端的仓库，详情页会退化为直接显示提交信息（不影响使用）。
 
+采集还有两条自动行为：
+- 采集前会 best-effort `git fetch --all`（20s 超时，无远端/离线时静默跳过），所以你在 GitHub 网页上直接提交的、或从别的机器 push 的内容也能被采到，不用手动 pull。
+- 只采集**你自己**的提交：按仓库 `git config user.email` 匹配作者（未配置邮箱的仓库退化为全采）。共享仓库里别人的提交不会混进你的日报。
+
 ### 6.2 把网站部署到公网（人人可访问）
 
 **只部署 `site/` 这个纯静态目录**；本地 `daily-agent`（持 API key、读本地文件）**永远不部署**。
@@ -226,7 +230,7 @@ git push -u origin main
 - **拉依赖超时 / 被墙**：`go env -w GOPROXY=https://goproxy.cn,direct`（Go 官方 proxy 在国内不可达；Anthropic API 不受影响）。
 - **中文变乱码**：编辑 `site/*.html` 用普通编辑器或 UTF-8 工具；避免 PowerShell `Get-Content -Raw` 读改含中文的文件。
 - **Zotero 读不到 / 库被锁**：程序用 `?mode=ro&immutable=1` 只读打开，正常不会锁；「今天 0 条」通常是今天没在 Zotero 里动过条目。
-- **git 采集为空**：`-git-repos` 要填本地仓库文件夹路径；本项目目录若不是 git 仓库需先 `git init`。
+- **git 采集为空**：`-git-repos` 要填**本地仓库文件夹路径**（填 GitHub 网址无效，启动时程序会打警告）；本项目目录若不是 git 仓库需先 `git init`。采集前会自动 fetch 远端、只采自己邮箱（`git config user.email`）的提交——自己明明提交了却采不到，先确认该仓库的 `git config user.email` 与你提交时用的邮箱一致。
 - **截图工具超时**：页面有持续的雨滴动画，自动化截图会等不到静止帧，属正常，不影响使用。
 - **启动报 `bind: Only one usage of each socket address`（或 address already in use）**：8765 端口被占用，通常是上一个 daily-agent 没退干净还在后台跑。两种解法：
   ```powershell

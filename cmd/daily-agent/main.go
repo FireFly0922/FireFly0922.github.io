@@ -70,9 +70,15 @@ func buildCollectors(kind, gitRepos, vault, zoteroDB string) []collect.Collector
 	case "real":
 		var repos []string
 		for _, r := range strings.Split(gitRepos, ",") {
-			if r = strings.TrimSpace(r); r != "" {
-				repos = append(repos, r)
+			if r = strings.TrimSpace(r); r == "" {
+				continue
 			}
+			if st, err := os.Stat(r); err != nil || !st.IsDir() {
+				// 常见坑：把 GitHub 网址塞进 -git-repos。该参数只认本地文件夹路径，
+				// 不是目录的条目采集时会被静默跳过——这里提前喊一嗓子。
+				log.Printf("警告：-git-repos 条目 %q 不是本地目录（网址不会生效），采集时将被跳过", r)
+			}
+			repos = append(repos, r)
 		}
 		log.Printf("真实读取器：git=%v obsidian=%q zotero=%q", repos, vault, zoteroDB)
 		return []collect.Collector{
