@@ -1,5 +1,15 @@
 [
   {
+    "id": "obs-师姐项目/thinking.md",
+    "title": "thinking",
+    "tags": [
+      "师姐项目"
+    ],
+    "date": "2026-09-16",
+    "snippet": "一些想法",
+    "content": "## 一些想法\n### MOE\nMoE 让“总参数容量很大的模型”每次只激活少量参数，因此获得更高的 capacity / compute 比。\n普通架构下8B的模型不一定比MOE架构1B的模型效果好，而且这种架构可以带来极大程度上训练\u0026推理速度的提升\n这种架构其实是多个 expert ，在面对不同任务时激活的区域不一样，可以理解为一种动态的剪枝策略，训练\u0026推理时的参数量就会因此大幅降低\n虽然完整实现一个MOE可能比较困难，但是可以尝试借鉴 MOE 架构的路由机制(router)\n[对当前情况，哪个expert也就是teacher最值得学习](https://arxiv.org/abs/2502.12947)\nMOE 证明的是：模型不是“稠密”（参数量密集）就好，这一点其实在 scaling laws 的研究中也能看出，而是应该充分使用参数，让其在需要时被激活，“稀疏”模型\n### RSI\nRSI 是一种自进化 agent ，也是现在比较火的方向，其核心问题就是在没有标准答案的情况下，如何返回可靠的 reward\nevalutor 也需要更新\n### 潜空间\n架构规定的d，称作外在维度；有一种假设：其实模型的效果只需要很小一部分的维度就能表示，称在解决该问题时的“内在维度”\n潜空间：层x($224 \\times 224 \\times 3$)经过encoder变换到$512$，这就是潜空间的变化\n在训练过程中，随训练轮数更新梯度，数据点在表述空间中移动\n## 工程实现\n层状结构对应蒸馏\n```\nURSCT\n├── 输入块\n│   ├── 灰度图通道适配\n│   └── Conv First\n│\n├── Token 化块\n│   └── Patch Embedding\n│\n├── Encoder 多尺度建模块\n│   ├── Stage 0\n│   │   ├── SwinTransformerBlock × depth[0]\n│   │   └── PatchMerging\n│   ├── Stage 1\n│   │   ├── SwinTransformerBlock × depth[1]\n│   │   └── PatchMerging\n│   ├── Stage 2\n│   │   ├── SwinTransformerBlock × depth[2]\n│   │   └── PatchMerging\n│   └── Stage 3\n│       └── SwinTransformerBlock × depth[3]\n│\n├── Skip 细节增强块\n│   ├── Stage 0 Skip：DMSR/DDMSR\n│   └── Stage 1 Skip：DMSR/DDMSR\n│\n├── 频域增强块\n│   ├── Model 3：Bottleneck FFT\n│   ├── Model 4：Stage 1 后 FFT\n│   └── Model 5：Stage 1 后单门控 FFT\n│\n├── Decoder 重建块\n│   ├── UpSample\n│   ├── Skip 拼接\n│   ├── Linear 通道压缩\n│   └── BasicLayer_up\n│\n└── 输出块\n    ├── Dual Upsample\n    └── 3×3 Conv\n```\n"
+  },
+  {
     "id": "obs-个人/ai_infra_learning_path_obsidian.md",
     "title": "ai_infra_learning_path_obsidian",
     "tags": [
