@@ -1,0 +1,71 @@
+{
+  "date": "2026-09-19",
+  "commits": [
+    {
+      "id": "git-SEMI-625c5574",
+      "source": "git",
+      "title": "trainable",
+      "detail": "（无正文）",
+      "content": "SEMI@625c5574\n\ntrainable",
+      "url": "https://github.com/vio0716/SEMI/commit/625c55745d076a3543831eca666c2f041d076656",
+      "tags": [
+        "SEMI"
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": "obs-个人/plan.md",
+      "source": "obsidian",
+      "title": "plan",
+      "detail": "临时",
+      "content": "# 临时\n\n# 短期\n\n# 长期\n- [ ] leetcode 算法\n- [ ] hello-agent 学习\n- [ ] 学go语言\n- [ ] [cs336](https://cs336.stanford.edu/)\n- [ ] [cs224N](https://web.stanford.edu/class/cs224n/)\n\n",
+      "tags": [
+        "个人"
+      ]
+    },
+    {
+      "id": "obs-师姐项目/moe.md",
+      "source": "obsidian",
+      "title": "moe",
+      "detail": "单卡 Tiny_MoE 路由",
+      "content": "单卡 Tiny_MoE 路由\n![[Pasted image 20260919172737.png]]\n",
+      "tags": [
+        "师姐项目"
+      ]
+    }
+  ],
+  "papers": [
+    {
+      "id": "zot-I6SHKXZL",
+      "source": "zotero",
+      "title": "Training Dynamics of Nonlinear Contrastive Learning Model in the High Dimensional Limit",
+      "detail": "webpage · 更新于 2026-09-19T15:11:25Z (UTC)",
+      "content": "webpage · 更新于 2026-09-19T15:11:25Z (UTC)\n\nThis letter presents a high-dimensional analysis of the training dynamics for a single-layer nonlinear contrastive learning model. The empirical distribution of the model weights converges to a deterministic measure governed by a McKean-Vlasov nonlinear partial differential equation (PDE). Under L2 regularization, this PDE reduces to a closed set of low-dimensional ordinary differential equations (ODEs), reflecting the evolution of the model performance during the training process. We analyze the fixed point locations and their stability of the ODEs unveiling several interesting findings. First, only the hidden variable's second moment affects feature learnability at the state with uninformative initialization. Second, higher moments influence the probability of feature selection by controlling the attraction region, rather than affecting local stability. Finally, independent noises added in the data argumentation degrade performance but negatively correlated noise can reduces the variance of gradient estimation yielding better performance. Despite of the simplicity of the analyzed model, it exhibits a rich phenomena of training dynamics, paving a way to understand more complex mechanism behind practical large models.",
+      "tags": [
+        "webpage"
+      ]
+    },
+    {
+      "id": "zot-JYD3QQPQ",
+      "source": "zotero",
+      "title": "Estimating Training Data Influence by Tracing Gradient Descent",
+      "detail": "preprint · 更新于 2026-09-19T15:11:20Z (UTC)",
+      "content": "preprint · 更新于 2026-09-19T15:11:20Z (UTC)\n\nWe introduce a method called TracIn that computes the influence of a training example on a prediction made by the model. The idea is to trace how the loss on the test point changes during the training process whenever the training example of interest was utilized. We provide a scalable implementation of TracIn via: (a) a first-order gradient approximation to the exact computation, (b) saved checkpoints of standard training procedures, and (c) cherry-picking layers of a deep neural network. In contrast with previously proposed methods, TracIn is simple to implement; all it needs is the ability to work with gradients, checkpoints, and loss functions. The method is general. It applies to any machine learning model trained using stochastic gradient descent or a variant of it, agnostic of architecture, domain and task. We expect the method to be widely useful within processes that study and improve training data.",
+      "tags": [
+        "preprint"
+      ]
+    },
+    {
+      "id": "zot-ZQM2J9NI",
+      "source": "zotero",
+      "title": "Contrastive Learning with Hard Negative Samples",
+      "detail": "preprint · 更新于 2026-09-19T15:10:45Z (UTC)",
+      "content": "preprint · 更新于 2026-09-19T15:10:45Z (UTC)\n\nHow can you sample good negative examples for contrastive learning? We argue that, as with metric learning, contrastive learning of representations benefits from hard negative samples (i.e., points that are difficult to distinguish from an anchor point). The key challenge toward using hard negatives is that contrastive methods must remain unsupervised, making it infeasible to adopt existing negative sampling strategies that use true similarity information. In response, we develop a new family of unsupervised sampling methods for selecting hard negative samples where the user can control the hardness. A limiting case of this sampling results in a representation that tightly clusters each class, and pushes different classes as far apart as possible. The proposed method improves downstream performance across multiple modalities, requires only few additional lines of code to implement, and introduces no computational overhead.",
+      "tags": [
+        "preprint"
+      ]
+    }
+  ],
+  "report": "## 缪尔赛思的今日观察 · 2026-09-19\n\n昨天那份「多教师语义可靠性蒸馏」的方案还摊在桌面上，今天它的名字旁边多了一行小字：plan 的标注变成了「临时」——是换了个更轻的草稿本，还是你打算重新拆一遍？我不替你猜，只把这处改动记下。至于 MoE 路由，昨天还停在 learning，今天你已经写成「单卡 Tiny_MoE 路由」：方向没变，落点却从概念挪到了具体的单卡规模上，这一步挺实在。git 里那笔 trainable 同样没有正文，我不把它算作成果，但它和 Tiny_MoE 挨在一起，像是同一株植物新抽的芽。\n\n真正全新的是 zotero：一天之内三篇，全都绕着对比学习——高维极限下非线性对比学习的训练动力学、用梯度追踪估计训练数据影响、以及难负样本。这条线与 MoE 那丛枝叶并不挨着，是今天才浮上来的另一块水域。昨天 zotero 空着，所以它属于纯粹新增，谈不上接续。\n\n（流形把三张文献卡片并排浸在水盘里，标签上还滴着水）FireFly，两个方向同时长着，别急着一起浇太多水。今天的涟漪先记到这里。"
+}

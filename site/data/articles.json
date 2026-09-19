@@ -1,5 +1,25 @@
 [
   {
+    "id": "obs-个人/plan.md",
+    "title": "plan",
+    "tags": [
+      "个人"
+    ],
+    "date": "2026-09-19",
+    "snippet": "临时",
+    "content": "# 临时\n\n# 短期\n\n# 长期\n- [ ] leetcode 算法\n- [ ] hello-agent 学习\n- [ ] 学go语言\n- [ ] [cs336](https://cs336.stanford.edu/)\n- [ ] [cs224N](https://web.stanford.edu/class/cs224n/)\n\n"
+  },
+  {
+    "id": "obs-师姐项目/moe.md",
+    "title": "moe",
+    "tags": [
+      "师姐项目"
+    ],
+    "date": "2026-09-19",
+    "snippet": "单卡 Tiny_MoE 路由",
+    "content": "单卡 Tiny_MoE 路由\n![[Pasted image 20260919172737.png]]\n"
+  },
+  {
     "id": "obs-师姐项目/plan_final.md",
     "title": "plan_final",
     "tags": [
@@ -55,16 +75,6 @@
     "date": "2026-07-12",
     "snippet": "整体结构",
     "content": "# 整体结构\n$I^{lq}$ → $3 \\times 3\\ Conv$ → $Encoder\\ with\\ HTBs$ → $Bottleneck$ → $Decoder\\ with\\ HTBs$\n![[histoformer.png|697]]\n# HTB\n$$F_l = F_{l-1} + DHSA(LN(F_{l-1}))$$\n$$F_l = F_l + DGFF(F_l)$$\n## 动态范围直方图自注意力(DHSA)\n- 动态范围卷积：先排序，再卷积\n  先验假设：退化区域在空间上很分散，但视觉上很相似\n  对图片，排序本质上是”转置矩阵“，记 P ，原来是 x ，按照视觉相似重排后$s_{sort} = Px$，并做卷积后逆变化回原位置：$y = P^{-1}CPx$\n  注：此处的 P 实际来源于对图片展开后一维向量的序数，而不是真的需要找一个逆矩阵描述变化，此处默认图像的数值相似意味着视觉上的信息相似\n  对于卷积(以$3\\times3$)：其观察区域从空间上连续的$3\\times3$窗口，变为按照视觉上相似度排序的窗口\n- 直方图自注意力\n  由于上一步中重新排列后，卷积看到的图片变成视觉相似度排列的，Value 改变，此时$Attention(Q,K,V) = Softmax(\\frac{QK^T}{\\sqrt d})V$查询到的 Q 和 K 也是重排后的\n  注：在 attention 中，Q,K,V均和图像经过前面网络得到的特征图 F 成线性关系\n  原图$I$ → patch embedding / convolution → F → 投影 → V\n  排序后特征序列的一段(bin)规定为等数量切分方便并行加速\n\t- 按 bin 维度的直方图重排(BHR)\n\t  设 bin 数为 B ，包含$\\frac{HW}{B}$个元素，在重排序后落到同一个或相邻 bin 中\n\t- 基于频率的直方图重塑(FHR)\n\t  将每个 bin 的频率设为 B ，bin 数变成$\\frac{HW}{B}$，这里的”频率“是“每个 bin 中元素出现的频数 / 数量维度”，而非傅里叶频率\n\t- 对 BHR 和 FHR进行逐元素相乘$$A_B = Softmax(\\frac{R_B(Q_1)R_B(K_1)^T}{\\sqrt k})R_B(V)$$$$A_F = Softmax(\\frac{R_F(Q_2)R_F(K_2)^T}{\\sqrt k})R_F(V)$$\n\t  最终：逐元素相乘$A = A_B \\odot A_F$\n\t  这里更像是全局的直方图关系和细粒度的直方图关系融合\n- 对比空频融合\n\n| 模块               | 两个分支分别是什么                           | 融合含义              |\n| ---------------- | ----------------------------------- | ----------------- |\n| 空频协同 Transformer | 空域特征 ($X_s$) + 频域特征 ($X_f$)         | 空间结构与频率模式互补       |\n| Histoformer DHSA | BHR histogram 视角 + FHR histogram 视角 | 大范围动态关系与细粒度相似关系互补 |\n## 双尺度门控前馈网络(DGFF)\n使用$1 \\times 1$卷积核进行扩展(C通道数，H,W为空间信息)\n将多个通道维度的信息转换到空间维度(PicelShuffle)$X \\in R^{C \\cdot s^2 \\times H \\times W}\\ =\\ R^{C \\times sH \\times sW}$\n沿通道维度进行拆分$$F_{l,1} , F_{l,2} = Split(Shuffle(Conv_{1 \\times 1}(F_l)))$$\n将通道拆成两半：（使用深度卷积确保每个通道的信息不混合）\n$F_{l,1} \\rightarrow Conv^d_{5 \\times 5}$看大的局部区域\n$F_{l,2} \\rightarrow Conv^{d,dilated}_{3 \\times 3}$看稀疏扩张的大范围区域（空洞卷积：隔一定间隔采样）\n令$F_{l,2}$作为 gate 进行门控，也就是$Mish(F_{l,2})$大则$F_{l,1}$保留多$$Mish(F_{l,2}) \\odot F_{l,1}$$\nDGFF 完整流程：\n```\n输入特征 F_l\n   |\n1x1 卷积：扩展通道，增强表达能力\n   |\nPixelShuffle：把部分通道信息展开到空间维度\n   |\nSplit：沿通道拆成两支\n   |\n   |-----------------------------|\n   |                             |\n5x5 depth-wise conv        dilated 3x3 depth-wise conv\n提取较密集局部信息          提取更大范围上下文\n   |                             |\n   |                        Mish 激活\n   |                             |\n   |---------- 逐元素相乘 gate ---|\n                 |\n\tPixelUnshuffle：恢复特征排列\n                 |\n\t\t1x1 卷积：融合通道并输出\n                 |\n\t\t\t输出 F_{l+1}\n```\n# 问题\nDHSA 可能会收到高亮其它部分影响:\n- 气泡可能造成折射变形；\n- 气泡可能遮挡真实纹理；\n- 气泡和水下高光、鱼鳞、反光区域可能强度相似；\n- 水下图像还有偏色、低对比度、散射模糊；\n- 气泡不一定总是高亮，有时是透明边缘 + 内部折射。\n多角度检索\n"
-  },
-  {
-    "id": "obs-个人/plan.md",
-    "title": "plan",
-    "tags": [
-      "个人"
-    ],
-    "date": "2026-07-07",
-    "snippet": "短期",
-    "content": "# 短期\n- [x] 完成个人网页\n- [x] 梳理专利团雾识别思路，发给老板\n- [ ] 学习师姐发的资料\n- [ ] 看data free论文代码\n- [x] 接待铅笔\n- [ ] 和电赛小组讨练习项目\n- [ ] 《动手学深度学习》\n# 长期\n\n- [ ] leetcode算法\n- [ ] hello-agent学习\n- [ ] 学go语言"
   },
   {
     "id": "obs-动手学深度学习/卷积神经网络(CNN).md",
