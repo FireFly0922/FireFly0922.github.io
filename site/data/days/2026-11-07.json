@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-07",
+  "commits": [
+    {
+      "id": "git-CS_course-1bedf736",
+      "source": "git",
+      "title": "Added the basic components of a transformer",
+      "detail": "（无正文）",
+      "content": "CS_course@1bedf736\n\nAdded the basic components of a transformer",
+      "url": "https://github.com/FireFly0922/CS_course/commit/1bedf7368af199aa282250528c40cee5f9016bbd",
+      "tags": [
+        "CS_course"
+      ]
+    }
+  ],
+  "notes": null,
+  "papers": [
+    {
+      "id": "zot-FV6ASYHP",
+      "source": "zotero",
+      "title": "OpenFlyV2: An onboard vision-language-action model for aerial perception and navigation",
+      "detail": "preprint · 更新于 2026-11-07T02:22:47Z (UTC)",
+      "content": "preprint · 更新于 2026-11-07T02:22:47Z (UTC)\n\nHuman cognition flexibly draws on a shared perceptual foundation to understand environments, attend to referenced entities, reason about spatial relationships, and act. Endowing aerial robots with an analogous functional organization remains challenging, as existing systems are often specialized for individual capabilities, dependent on offboard computation, or unable to sustain closed-loop operation on resource-constrained platforms. We present OpenFlyV2, a unified onboard vision-language-action architecture that uses a shared vision-language representation to support semantic understanding, language-grounded perception, spatial reasoning, and continuous aerial control within a single model. A compact action expert converts the shared multimodal context into short-horizon flight waypoints, while motion-aware temporal memory and action priors reduce the computational cost of closed-loop execution. We construct \\dataset{}, a simulation-based dataset comprising approximately 70,000 navigation trajectories and 60,000 vision-language instruction--response pairs. OpenFlyV2 generates action chunks, each comprising 12 waypoints, entirely onboard at 10 Hz using an NVIDIA Jetson Orin NX. It transfers zero-shot from simulation to physical quadrotor flight, achieving a 48\\% navigation success rate across four real-world environments without real-world aerial training data. Extensive results demonstrate that broad vision-language competence and continuous closed-loop flight can coexist within a single model on a resource-constrained aerial platform. Code will be made publicly available at https://github.com/Ideal-ljl/AeroBrain.",
+      "tags": [
+        "preprint"
+      ]
+    }
+  ],
+  "report": "## 缪尔赛思的今日观察 · 2026-11-07\n\nFireFly，翻遍昨天的记录本，里面干干净净，所以我没法拿今天逐项去对照，只能把眼下这份当作全新的起点来看。哼哼，那就从今天这几条说起吧。\n\nGit 那边出现了「Added the basic components of a transformer」这次提交，虽然没留下正文说明，但方向很明确：transformer 的零件开始搭了，骨架先立起来，后面才有得拼。\n\n阅读这边，Zotero 里添了一条 OpenFlyV2 的预印本，讲的是面向空中感知与导航的机载视觉-语言-动作模型，今天刚有更新痕迹，算是新冒头的方向。至于 Obsidian，今天没有新笔记，这和“停下”是两回事，只是水流恰好绕过了这一段。\n\n（流形把两份清单并排放好，又用尾巴尖点了点那条提交，像在确认它真的存在。）\n\n所以今天的关键词大概是：一个新芽在传读，一块基石在代码里。FireFly，明天若还给 transformer 的组件添上叶子，我会替你记下第一道纹路。"
+}
