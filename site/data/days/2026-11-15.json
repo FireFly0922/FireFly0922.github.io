@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-15",
+  "commits": [
+    {
+      "id": "git-CS_course-ae93f82c",
+      "source": "git",
+      "title": "doing TinyLM",
+      "detail": "（无正文）",
+      "content": "CS_course@ae93f82c\n\ndoing TinyLM",
+      "url": "https://github.com/FireFly0922/CS_course/commit/ae93f82c3c13e03aa9089da3aa626d984213a95b",
+      "tags": [
+        "CS_course"
+      ]
+    }
+  ],
+  "notes": null,
+  "papers": null,
+  "report": "## 缪尔赛思的今日观察 · 2026-11-15\n\nFireFly，今天的记录少得像退潮后留在沙滩上的一行脚印，所以我先坦白：昨天没有日报存档，今天没办法和你逐项对照，只能把眼前这些当作全新的起点来看。\n\n唯一有实据的动静在 git 那边——出现了一个提交，标题写着“doing TinyLM”，正文是空的（我凑近看了看，连一句附言都没有）。标题里的 “doing” 很诚实：它在说这件事正在进行，还没到可以盖章宣布完成的阶段。至于走到哪一步，记录里没写，我也不替它编。\n\nobsidian 和 zotero 今天都没有留下新条目。这不代表你停下来了，只是读书笔记和文献那一侧今天暂时安静——有时候思考的重量要过两天才落到纸上。\n\n哼哼，我看这条单独的提交，倒像生态园里刚插下的一株小苗：位置清楚，长得怎样还要再等几个日出。明天若能给 TinyLM 补一句“做到了什么、卡在哪里”，这份日报会好写得多，你也能少费些回忆的力气。"
+}
