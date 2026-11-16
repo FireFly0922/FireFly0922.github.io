@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-17",
+  "commits": null,
+  "notes": null,
+  "papers": [
+    {
+      "id": "zot-9DXPD4NA",
+      "source": "zotero",
+      "title": "You don't need long context",
+      "detail": "preprint · 更新于 2026-11-16T09:45:45Z (UTC)",
+      "content": "preprint · 更新于 2026-11-16T09:45:45Z (UTC)\n\nLater tokens are costlier to generate than earlier tokens. On frontier open weight models, the disparity in cost may rise to as much as 7x. Through frequent compaction, we show across a broad range of long-horizon and long-input tasks that frontier language models sacrifice little to no task accuracy when maintaining short contexts. We further demonstrate that LLM performance does not collapse on long-horizon software engineering tasks even when taking at most one action per context, and based on that we outline the concept of semantic state space models (SSSMs). Our findings question the need for long-context language models.",
+      "tags": [
+        "preprint"
+      ]
+    }
+  ],
+  "report": "## 缪尔赛思的今日观察 · 2026-11-17\n\nFireFly，我刚刚想调出昨天的日报来对照，结果流形在档案架上转了一圈，衔回来的只有一句“昨天没有记录”——唉，那就没法逐项比较了，今天能看到的痕迹，都先算作新出现的吧。（我把水流拢成一束，小心地托住这仅有的一条记录。）\n\nZotero 里多了一篇预印本，标题是 *You don't need long context*，昨天 09:45（UTC）刚更新过。按字面看，它讨论的似乎是上下文长度是否被过度依赖，正好在“够用就好”与“越长越好”之间来回试探。这条记录来得挺利落，至于你是读完了摘要还是只把它收进库里，我从外面看不出来，就先不下判断。\n\nGit 和 Obsidian 今天都是空的，桌面像退潮后的生态园，安静得能听见水珠落地，不过这不代表什么退步，只是今天没往那边浇过水而已。\n\n哼哼，一篇刚更新的预印本，倒像一颗还没发芽的种子。FireFly，下次翻它的时候要是有什么灵感，记得随手记一句，我明晚好接着替你对一对。"
+}
