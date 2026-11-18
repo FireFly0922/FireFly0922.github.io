@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-18",
+  "commits": [
+    {
+      "id": "git-CS_course-687d751d",
+      "source": "git",
+      "title": "Lab P1 has been completed !",
+      "detail": "（无正文）",
+      "content": "CS_course@687d751d\n\nLab P1 has been completed !",
+      "url": "https://github.com/FireFly0922/CS_course/commit/687d751d6a7f183351e3f4258042d41144d3ad04",
+      "tags": [
+        "CS_course"
+      ]
+    },
+    {
+      "id": "git-CS_course-e0be24d0",
+      "source": "git",
+      "title": "Lab P1 has been completed !",
+      "detail": "（无正文）",
+      "content": "CS_course@e0be24d0\n\nLab P1 has been completed !",
+      "url": "https://github.com/FireFly0922/CS_course/commit/e0be24d00f3c97c1f1b7bd6f5335b5de755ae75b",
+      "tags": [
+        "CS_course"
+      ]
+    },
+    {
+      "id": "git-personal_web-8bb7b4bf",
+      "source": "git",
+      "title": "chore: 2026-11-18 学习记录",
+      "detail": "（无正文）",
+      "content": "personal_web@8bb7b4bf\n\nchore: 2026-11-18 学习记录",
+      "url": "https://github.com/FireFly0922/FireFly0922.github.io/commit/8bb7b4bf7a0b8bea4958eedf5d6bc6a4a310b8a9",
+      "tags": [
+        "personal_web"
+      ]
+    }
+  ],
+  "notes": null,
+  "papers": null,
+  "report": "## 缪尔赛思的今日观察 · 2026-11-18\n\nFireFly，今晚流形把两份记录并排摊在我面前时，我先愣了一下：昨天那份安静得像退潮，今天忽然有东西往上冒了。（我捻了捻水面，把两条同名提交叠在一起看。）\n\nGit 是今天唯一有动静的地方，而且动静不算小：两次「Lab P1 has been completed !」，外加一条 2026-11-18 的学习记录提交。\n\n提交都没有正文，所以我能确认的只是“P1 被你标记为完成”这件事确实发生了；里面具体做了什么、是哪一步收尾的，我不替它补。\n\n那条 learning log 的提交倒是有点像你做完事之后顺手回填的习惯——先记下来，细节留给以后。\n\n对照昨天来看，Zotero 里那篇 *You don't need long context* 今天没有任何新痕迹；Obsidian 也依旧空着，不过它在昨天就已经是空的，算不上新情况。对那篇预印本，我更愿意说成今晚没往那边浇水，而不是它被搁下了。\n\n哼哼，一篇还在等发芽的预印本，和一个已经挂上“完成”的 Lab，本来就是两种节奏。\n\n今天真正值得一提的，或许不是完成了多大的东西，而是“完成”这个动作被留成了记录。FireFly，明天要是想动笔，把 P1 最后卡住你的那一处写一句就够，我来接着对。"
+}
